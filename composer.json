@@ -8,7 +8,9 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.10.1"
+        "laravel/tinker": "^2.10.1",
+         "ext-pdo": "*",
+         "ext-pgsql": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -62,6 +64,7 @@
             "dont-discover": []
         }
     },
+    
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
@@ -73,4 +76,6 @@
     },
     "minimum-stability": "stable",
     "prefer-stable": true
+
+    
 }
