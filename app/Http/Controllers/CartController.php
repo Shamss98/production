@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\cart;
-use App\Models\cart_item;
+use App\Models\CartItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,7 +41,7 @@ class CartController extends Controller
 
     public function update(Request $request, $id)
     {
-        $item = cart_item::findOrFail($id);
+        $item = CartItem::findOrFail($id);
         if ($request->quantity <= 0) {
             $item->delete();
         } else {
@@ -53,7 +53,7 @@ class CartController extends Controller
 
     public function remove($id)
     {
-        $item = cart_item::findOrFail($id);
+        $item = CartItem::findOrFail($id);
         $item->delete();
 
         return redirect()->route('cart.index');

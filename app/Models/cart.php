@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use App\Models\CartItem;
 use Illuminate\Database\Eloquent\Model;
 
 class cart extends Model
@@ -14,6 +14,6 @@ class cart extends Model
 
     public function items()
     {
-        return $this->hasMany(Cart_Item::class);
+        return $this->hasMany(CartItem::class);
     }
 }

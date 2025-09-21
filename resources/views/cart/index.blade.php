@@ -1,4 +1,6 @@
+@extends('layoutes.main')
 
+@section('content')
 <style>
     body {
         font-family: 'Cairo', Arial, sans-serif;
@@ -45,15 +47,19 @@
     input[type="number"]:focus {
         border-color: #007bff;
     }
-    button {
+    button, .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        border: none;
+        transition: all 0.3s ease;
+    }
+    button[type="submit"] {
         background: #28a745;
         color: #fff;
-        border: none;
-        padding: 8px 18px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background 0.3s, transform 0.2s;
     }
     button[type="submit"]:hover {
         background: #218838;
@@ -72,15 +78,22 @@
     form[action*="clear"] button:hover {
         background: #e0a800;
     }
+    .btn-success {
+        background: linear-gradient(90deg, #28a745 0%, #218838 100%);
+        color: #fff;
+        box-shadow: 0 2px 8px rgba(40,167,69,0.15);
+    }
+    .btn-success:hover {
+        background: linear-gradient(90deg, #218838 0%, #28a745 100%);
+        transform: scale(1.05) translateY(-2px);
+        box-shadow: 0 4px 16px rgba(40,167,69,0.25);
+    }
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(30px);}
         to { opacity: 1; transform: translateY(0);}
     }
 </style>
 
-@extends('layoutes.main')
-
-@section('content')
 <h2>سلة التسوق</h2>
 <table>
     <tr>
@@ -99,12 +112,14 @@
                 <a href="{{ route('viewproducts', $item->product->id) }}">
                     <img src="{{ asset('storage/' . $item->product->image) }}" alt="{{ $item->product->name }}" style="width: 50px; height: 50px; object-fit: cover;">
                 </a>
+            </td>
             <td>
                 <a href="{{ route('viewproducts', $item->product->id) }}">
                     {{ $item->product->name }}
                 </a>
             </td>
-            <td>  <form action="{{ route('cart.update', $item->id) }}" method="POST">
+            <td>
+                <form action="{{ route('cart.update', $item->id) }}" method="POST">
                     @csrf
                     <input type="number" name="quantity" value="{{ $item->quantity }}">
                     <button type="submit">تحديث</button>
@@ -123,73 +138,14 @@
 </table>
 
 <h3>الإجمالى: {{ $total }}</h3>
-<form action="{{ route('cart.clear') }}" method="POST" style="text-align:center;">
-    @csrf
-    <button type="submit" class="action-btn">إفراغ السلة</button>
 
-<a href="{{ route('checkout.cart') }}" class="btn btn-success">
-    ادفع السلة
-</a>
+<div style="text-align:center; margin-top:20px;">
+    <form action="{{ route('cart.clear') }}" method="POST" style="display:inline-block;">
+        @csrf
+        <button type="submit">إفراغ السلة</button>
+    </form>
 
-
-    <style>
-        .action-btn {
-            display: inline-block;
-            min-width: 220px;
-            padding: 12px 32px;
-            font-size: 20px;
-            font-weight: bold;
-            border-radius: 6px;
-            text-decoration: none;
-            text-align: center;
-            box-sizing: border-box;
-            margin: 10px 5px 0 5px;
-        }
-        .checkout-btn {
-            background: linear-gradient(90deg, #28a745 0%, #218838 100%);
-            color: #fff;
-            box-shadow: 0 2px 8px rgba(40,167,69,0.15);
-            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
-            animation: bounceIn 0.8s;
-            border: none;
-        }
-        .checkout-btn:hover {
-            background: linear-gradient(90deg, #218838 0%, #28a745 100%);
-            transform: scale(1.05) translateY(-2px);
-            box-shadow: 0 4px 16px rgba(40,167,69,0.25);
-            color: #fff;
-        }
-        .action-btn[type="submit"], .action-btn:not(a) {
-            background: #ffc107;
-            color: #333;
-            border: none;
-            box-shadow: 0 2px 8px rgba(255,193,7,0.10);
-            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
-        }
-        .action-btn[type="submit"]:hover, .action-btn:not(a):hover {
-            background: #e0a800;
-            color: #333;
-            transform: scale(1.05) translateY(-2px);
-            box-shadow: 0 4px 16px rgba(255,193,7,0.18);
-        }
-        @keyframes bounceIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.7) translateY(40px);
-            }
-            60% {
-                opacity: 1;
-                transform: scale(1.05) translateY(-10px);
-            }
-            80% {
-                transform: scale(0.98) translateY(2px);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-    </style>
-</form>
+    <a href="{{ route('checkout.cart') }}" class="btn btn-success">ادفع السلة</a>
+</div>
 
 @endsection

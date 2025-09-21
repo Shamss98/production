@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\cart;
 use Illuminate\Database\Eloquent\Model;
 
-class cart_item extends Model
+class CartItem extends Model
 {
     protected $table = 'cart_items';
     
