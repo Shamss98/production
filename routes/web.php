@@ -24,7 +24,7 @@ Route::get('/products/category/{categoryId}/brand/{brandId}', [ProductController
 Route::get('/search', [ProductController::class, 'search'])->name('search');
 
 Route::get('/login', [UserController::class, 'index'])->name('login');
-Route::post('/login', [UserController::class, 'login'])->name('login');
+Route::post('/login', [UserController::class, 'login'])->name('user.login');
 Route::get('/register', [UserController::class, 'register'])->name('register');
 Route::post('/register', [UserController::class, 'store'])->name('store');
 

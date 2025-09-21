@@ -66,7 +66,7 @@
 {{-- End Error message --}}
 
 {{-- Login form --}}
-    <form method="POST" action="{{ route('login') }}" style="animation: fadeIn 1s;">
+    <form method="POST" action="{{ route('user.login') }}" style="animation: fadeIn 1s;">
         @csrf
         <div style="animation: slideInLeft 0.7s;">
             <label for="email">الايميل</label>
