@@ -23,14 +23,14 @@
         transform: translateY(-8px) scale(1.03);
         box-shadow: 0 8px 32px rgba(37,99,235,0.16), 0 3px 12px rgba(0,0,0,0.08);
     }
-    .product-card img {
-        height: 180px;
-        object-fit: cover;
-        border-bottom: 1px solid #f3f4f6;
-        transition: filter 0.3s;
-        width: 100%;
-        background: #f3f4f6;
-    }
+.product-card img {
+    height: 200px;
+    object-fit: contain; /* تم تعديل هذه الخاصية */
+    border-bottom: 1px solid #f3f4f6;
+    transition: filter 0.3s;
+    width: 100%;
+    background: #f3f4f6;
+}
     .product-card:hover img {
         filter: brightness(0.95) saturate(1.1);
     }

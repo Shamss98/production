@@ -116,6 +116,25 @@
             </div>
         </div>
         <!-- End Brands Card -->
+        <!-- Start Brands Card -->
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="card shadow border-0">
+                <a class="text-decoration-none" href="{{ route('admin.contacts.index') }}">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="icon icon-shape bg-info text-white rounded-circle shadow me-3">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted mb-1">رسائل الاعضاء</h6>
+                            <h3 class="mb-0">{{ $contactsCount }}</h3>
+                        </div>
+                    </div>
+                </div>
+                </a>
+            </div>
+        </div>
+        <!-- End Brands Card -->
     </div>
 
     <!-- Add Category & Product Buttons -->

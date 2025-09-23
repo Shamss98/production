@@ -66,30 +66,40 @@
     </div>
     <hr>
        <!-- ✅ Related Products Section -->
-    <div class="mt-5">
-        <h3>منتجات ذات صلة</h3>
-        <div class="row">
-            @foreach($relatedProducts as $related)
-                <div class="col-md-3 mb-4">
-                    <div class="">
-                        <a href="{{ route('viewproducts', $related->id) }}">
-                            <img src="{{ asset('storage/' . $related->image) }}" 
-                                 class="card-img-top" 
-                                 alt="{{ $related->name }}" 
-                                 style="min-height: 200px;">
+<div class="mt-5" style="margin-top: 3rem;">
+    <h3>منتجات ذات صلة</h3>
+    <div class="row" style="display: flex; flex-wrap: wrap; margin-left: -0.5rem; margin-right: -0.5rem;">
+        @foreach($relatedProducts as $related)
+            <div class="col-md-3 mb-4" style="flex: 0 0 25%; max-width: 25%; padding-left: 0.5rem; padding-right: 0.5rem; margin-bottom: 1.5rem;">
+                <div style="height: 400px; border: none; border-radius: 16px; box-shadow: 0 4px 24px rgba(37, 99, 235, 0.08), 0 1.5px 6px rgba(0, 0, 0, 0.04); overflow: hidden; transition: transform 0.25s cubic-bezier(.4, 0, .2, 1), box-shadow 0.25s cubic-bezier(.4, 0, .2, 1); background: #fff; animation: fadeInUp 0.7s cubic-bezier(.4, 0, .2, 1);">
+                    <a href="{{ route('viewproducts', $related->id) }}" style="text-decoration: none; color: inherit;">
+                        <img src="{{ asset('storage/' . $related->image) }}" 
+                            class="card-img-top" 
+                            alt="{{ $related->name }}" 
+                            style="width: 100%; height: 200px; object-fit: contain; border-bottom: 1px solid #f3f4f6; transition: filter 0.3s; background: #f3f4f6;">
+                    </a>
+
+                    <div class="card-body" style="padding: 1rem;">
+                    <h5 class="card-title" 
+                        title="{{ $related->name }}"
+                        style="font-size: 1.25rem; font-weight: 500; margin-bottom: 0.5rem;
+                            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+                            max-width: 100%; display: block; cursor: pointer;">
+                        {{ $related->name }}
+                    </h5>
+                        <p class="text-success" style="color: #28a745; font-size: 1rem; font-weight: 600;">${{ number_format($related->price, 2) }}</p>
+                    <!--Rating-->
+                    <x-rating/>
+                    <!--End Rating-->
+                        <a href="{{ route('viewproducts', $related->id) }}" class="btn btn-outline-primary btn-sm" style=" margin-top: 5px; display: inline-block; font-weight: 400; color: #007bff; text-align: center; vertical-align: middle; user-select: none; background-color: transparent; border: 1px solid #007bff; padding: 0.25rem 0.5rem; font-size: 0.875rem; line-height: 1.5; border-radius: 0.25rem; transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;">
+                            عرض المنتج
                         </a>
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $related->name }}</h5>
-                            <p class="text-success">${{ number_format($related->price, 2) }}</p>
-                            <a href="{{ route('viewproducts', $related->id) }}" class="btn btn-outline-primary btn-sm">
-                                عرض المنتج
-                            </a>
-                        </div>
                     </div>
                 </div>
-            @endforeach
-        </div>
+            </div>
+        @endforeach
     </div>
+</div>
     <!-- End Related Products -->
 </div>
 <hr>

@@ -7,6 +7,7 @@ use App\Models\Brand;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -88,6 +89,8 @@ class AdminController extends Controller
         ->distinct('user_id')
         ->count('user_id');
 
+        // Message For Contacts 
+        $contactsCount = Contact::count();
 
         $totalUsersNow = User::count(); 
         $totalUsersLastWeek = User::where('created_at', '<', now()->subWeek())->count();
@@ -125,6 +128,7 @@ class AdminController extends Controller
         'activeSessions',
         'userGrowth',
         'brandsCount',
+        'contactsCount'
     ));
 }
 

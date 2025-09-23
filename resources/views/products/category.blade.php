@@ -1,19 +1,29 @@
 @extends('layoutes.main')
 
 @section('content')
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-12">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('index') }}">الرئيسية</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('products.index') }}">المنتجات</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ $category->name }}</li>
-                </ol>
-            </nav>
-        </div>
+<div class="container mt-3">
+<div class="row">
+    <div class="col-12">
+        <nav aria-label="breadcrumb" style="background: #f8f9fa; padding: 10px 15px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin-bottom: 20px;">
+            <ol class="breadcrumb mb-0" style="margin: 0; font-size: 16px;">
+                <li class="breadcrumb-item">
+                    <a href="{{ route('index') }}" style="text-decoration: none; color: #007bff; font-weight: 500;">
+                        الرئيسية
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="{{ route('products.index') }}" style="text-decoration: none; color: #007bff; font-weight: 500;">
+                        المنتجات
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page" style="color: #555; font-weight: 600;">
+                    {{ $category->name }}
+                </li>
+            </ol>
+        </nav>
     </div>
-    
+</div>
+
     <div class="row">
         <div class="col-12">
             <h1 class="text-center mb-5">منتجات {{ $category->name }}</h1>
@@ -22,22 +32,24 @@
 
 
 <!-- ✅ البراندات -->
-<div class="brands d-flex gap-3 mb-4">
+<div class="d-flex flex-wrap gap-4 justify-content-center mb-4">
     @foreach($category->brands as $brandItem)
-        <div style="text-align: center;">
+        <div class="text-center" style="flex: 1 1 120px; max-width: 200px;">
             <a href="{{ route('products.byBrand', [$category->id, $brandItem->id]) }}"
-               style="display: inline-block; padding: 10px; border: 2px solid #ddd; border-radius: 10px; transition: all 0.3s ease; {{ isset($brand) && $brand->id == $brandItem->id ? 'border-color:#007bff; background:#f0f8ff;' : '' }}">
+            class="d-block p-3 border rounded-3"
+            style="transition: all 0.3s ease; {{ isset($brand) && $brand->id == $brandItem->id ? 'border-color:#007bff; background:#f0f8ff;' : '' }}">
                 <img src="{{ asset('storage/' . $brandItem->image) }}" 
-                     alt="{{ $brandItem->name }}" 
-                     width="100" 
-                     style="display: block; margin: 0 auto; max-height: 120px; object-fit: contain;">
+                alt="{{ $brandItem->name }}" 
+                    class="img-fluid" 
+                    style="max-height: 120px; object-fit: contain;">
             </a>
-            <h3 class="mt-2" style="font-size: 20px; font-weight: 600; color: #333;">
+            <h3 class="mt-2 fs-6 fw-semibold text-dark">
                 {{ $brandItem->name }}
             </h3>
         </div>
     @endforeach
 </div>
+
 
 
 <hr>
@@ -83,6 +95,9 @@
                                     <small class="text-info">الفئة: {{ $product->category->name }}</small>
                                 </p>
                             @endif
+                            <!-- Rating -->
+                            <x-rating/>
+                            <!-- End Rating -->
                             <form action="{{ route('cart.add', $product->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 <button type="submit" class="btn btn-outline-primary btn-sm w-100 mt-1" style="font-size: 0.85rem; padding: 2px 0;">

@@ -41,7 +41,7 @@
 .category-image {
     width: 100%;
     height: 200px;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 14px 14px 0 0;
 }
 </style>
@@ -66,7 +66,7 @@
     <div class="row">
         @if($categories->count() > 0)
             @foreach($categories as $i => $category)
-                <div class="col-md-4 col-lg-3 mb-4">
+                <div class="col-md-4 col-lg-2 mb-4">
                     <a href="{{ route('products.category', $category->id) }}" class="text-decoration-none text-dark">
                         <div class="card h-100 shadow-sm category-card animated-fadeInUp" style="border-radius: 14px; border: none; animation-delay: {{ 0.1 + $i*0.08 }}s;">
                             @if($category->image)

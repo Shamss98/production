@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ReviewController;
 use App\Models\Order;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -46,9 +47,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('brands', BrandController::class);
     // Product CRUD
     Route::resource('products', ProductController::class);
-});
-Route::get('viewproduct/{id}', [ProductController::class, 'viewproduct'])->name('viewproducts');
 
+    Route::get('/contacts', [ContactController::class, 'adminIndex'])->name('contacts.index');
+
+
+});
+
+
+
+Route::get('viewproduct/{id}', [ProductController::class, 'viewproduct'])->name('viewproducts');
 
 
 Route::fallback(function () {
@@ -106,3 +113,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/offers', [ProductController::class, 'isOffer'])->name('offers');
 Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->name('products.reviews.store');
+
+// Contact routes
+Route::get('/contact', [App\Http\Controllers\ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');

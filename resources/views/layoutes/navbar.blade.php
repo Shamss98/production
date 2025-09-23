@@ -21,8 +21,8 @@
         }
     </style>
     <div class="container">
-        <a class="brand" href="{{ url('/') }}" style="color: #2563eb; padding: 0.5rem 1rem; border-radius: 10px; font-size: 1.35rem; font-weight: bold; background: #f3f4f6; box-shadow: 0 2px 8px rgba(37,99,235,0.08);">
-            السوق
+        <a class="brand" href="{{ url('/') }}" style="color: #2563eb; padding: 0.5rem 1rem; border-radius: 10px; font-size: 1.35rem; font-weight: bold;">
+         إي-مول للتسوق
         </a>
         <button class="toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -30,11 +30,20 @@
             </svg>
         </button>
         <div class="nav-links" id="navMenu">
-            <div class="search">
-                <form action="{{ url('/search') }}" method="GET">
-                    <input type="text" name="q" placeholder="Search products..." value="{{ request('q') }}">
-                </form>
-            </div>
+<div class="search" style="position: relative; display: flex; justify-content: flex-end; align-items: center;">
+    <!-- أيقونة البحث -->
+    <span id="searchIcon"
+        style="cursor: pointer; font-size: 20px; color: #333; padding: 8px 10px; border: 1px solid #ccc; border-radius: 50%; background: #f8f9fa; display: inline-block; transition: all 0.3s ease;">
+        <i class="fas fa-search"></i>
+    </span>
+
+    <!-- فورم البحث -->
+    <form action="{{ url('/search') }}" method="GET" id="searchBox"
+        style="display: none; overflow: hidden; width: 0; transition: width 0.4s ease; margin-left: 10px;">
+        <input type="text" name="q" placeholder="Search products..." value="{{ request('q') }}"
+            style="width: 150x; padding: 8px 10px; border: 1px solid #ccc; border-radius: 20px; font-size: 14px;">
+    </form>
+</div>
             <ul class="links">
                 <li><a href="{{ route('index') }}">الرئيسية</a></li>
                 <li><a href="{{ route('products.index') }}">المنتجات</a></li>
@@ -85,7 +94,7 @@
                                 onmouseover="this.style.background='linear-gradient(90deg, #f59e42 0%, #f43f5e 100%)';this.style.borderColor='#f59e42';this.style.transform='scale(1.07)';this.style.boxShadow='0 4px 16px rgba(245,158,66,0.15)';"
                                 onmouseout="this.style.background='linear-gradient(90deg, #f43f5e 0%, #f59e42 100%)';this.style.borderColor='#f43f5e';this.style.transform='scale(1)';this.style.boxShadow='0 2px 8px rgba(244,63,94,0.08)';"
                             >
-                                اطلع برا🚪
+                               <i class="fa-solid fa-right-from-bracket"></i>
                             </button>
                         </form>
                     </li>
@@ -107,6 +116,38 @@
                 });
             }
         })();
+    const searchIcon = document.getElementById('searchIcon');
+    const searchBox = document.getElementById('searchBox');
+
+    searchIcon.addEventListener('click', () => {
+        searchIcon.style.display = 'none';
+        searchBox.style.display = 'inline-block';
+        setTimeout(() => {
+            searchBox.style.width = '180px';
+        }, 10);
+    });
+
+    // إرجاع الأيقونة عند الضغط على Esc
+    document.addEventListener('keydown', (e) => {
+        if (e.key === "Escape") {
+            searchBox.style.width = '0';
+            setTimeout(() => {
+                searchBox.style.display = 'none';
+                searchIcon.style.display = 'inline-block';
+            }, 400);
+        }
+    });
+
+    // إرجاع الأيقونة عند الضغط في أي مكان خارج البحث
+    document.addEventListener('click', (e) => {
+        if (!document.querySelector('.search').contains(e.target) && searchBox.style.display === 'inline-block') {
+            searchBox.style.width = '0';
+            setTimeout(() => {
+                searchBox.style.display = 'none';
+                searchIcon.style.display = 'inline-block';
+            }, 400);
+        }
+    });
     </script>
 </nav>
 

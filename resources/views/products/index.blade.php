@@ -49,6 +49,9 @@
                                     <small class="text-info">الفئة: {{ $product->category->name }}</small>
                                 </p>
                             @endif
+                            <!-- Rating -->
+                            <x-rating/>
+                            <!-- End Rating -->
                             <form action="{{ route('cart.add', $product->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 <button type="submit" class="btn btn-outline-primary btn-sm w-100 mt-1" style="font-size: 0.85rem; padding: 2px 0;">
