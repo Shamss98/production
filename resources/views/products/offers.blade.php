@@ -14,7 +14,7 @@
     }
     .offer-img {
         height: 200px;
-        object-fit: cover;
+        object-fit: contain;
         border-top-left-radius: 12px;
         border-top-right-radius: 12px;
         transition: filter 0.3s;
@@ -46,10 +46,10 @@
 </style>
 
 <div class="container">
-    <h1 class="mb-4 text-center">Special Offers</h1>
+    <h1 class="mb-4   text-center">Special Offers</h1>
     <div class="row">
         @forelse($products as $product)
-            <div class="col-md-4 mb-4 d-flex align-items-stretch">
+            <div class="col-md-4 mb-4 d-flex  align-items-stretch">
                 <div class="card offer-card w-100 h-100 position-relative">
                     <!-- Offer Badge -->
                     <span class="badge bg-danger position-absolute" style="top: 12px; left: 12px; z-index: 2; font-size: 1rem; padding: 0.5em 1em;">
@@ -67,7 +67,7 @@
                             <span class="offer-price">${{ $product->offer_price }}</span>
                             <del class="text-muted">${{ $product->original_price }}</del>
                         </p>
-                        <a href="{{ route('viewproducts', $product->id) }}" class="btn btn-primary mt-auto">View Product</a>
+                        <a href="{{ route('viewproducts', $product->id) }}" class="btn btn-primary mt-auto">عرض المنتج</a>
                     </div>
                 </div>
             </div>

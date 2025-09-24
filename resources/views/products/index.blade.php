@@ -1,5 +1,7 @@
 @extends('layoutes.main')
 
+@section('title', 'جميع المنتجات')
+
 @section('content')
 <div class="container mt-5">
     <div class="row">
@@ -71,17 +73,69 @@
         @endif
     </div>
     
-    @if($products->hasPages())
-        <div class="row mt-4">
-            <div class="col-12">
-                <div class="d-flex justify-content-center">
-                    {{ $products->links() }}
-                </div>
-            </div>
-        </div>
-    @endif
+    @if ($products->hasPages())
+    <ul class="pagination" style="list-style:none; display:flex; gap:4px; padding:0; margin:0; justify-content:center; font-size:12px;">
+        
+        {{-- Previous Page Link --}}
+        @if ($products->onFirstPage())
+            <li style="padding:4px 8px; border:1px solid #ddd; border-radius:4px; color:#aaa;">‹</li>
+        @else
+            <li>
+                <a href="{{ $products->previousPageUrl() }}" rel="prev" 
+                   style="padding:4px 8px; border:1px solid #ddd; border-radius:4px; color:#333; text-decoration:none;">
+                   ‹
+                </a>
+            </li>
+        @endif
+
+        {{-- Pagination Elements --}}
+        @foreach ($products->links()->elements as $element)
+            {{-- "Three Dots" Separator --}}
+            @if (is_string($element))
+                <li style="padding:4px 8px; border:1px solid #ddd; border-radius:4px; color:#aaa;">
+                    {{ $element }}
+                </li>
+            @endif
+
+            {{-- Array Of Links --}}
+            @if (is_array($element))
+                @foreach ($element as $page => $url)
+                    @if ($page == $products->currentPage())
+                        <li style="padding:4px 8px; border:1px solid #007bff; border-radius:4px; background:#007bff; color:#fff; font-weight:bold;">
+                            {{ $page }}
+                        </li>
+                    @else
+                        <li>
+                            <a href="{{ $url }}" 
+                               style="padding:4px 8px; border:1px solid #ddd; border-radius:4px; color:#333; text-decoration:none;">
+                               {{ $page }}
+                            </a>
+                        </li>
+                    @endif
+                @endforeach
+            @endif
+        @endforeach
+
+        {{-- Next Page Link --}}
+        @if ($products->hasMorePages())
+            <li>
+                <a href="{{ $products->nextPageUrl() }}" rel="next" 
+                   style="padding:4px 8px; border:1px solid #ddd; border-radius:4px; color:#333; text-decoration:none;">
+                   ›
+                </a>
+            </li>
+        @else
+            <li style="padding:4px 8px; border:1px solid #ddd; border-radius:4px; color:#aaa;">›</li>
+        @endif
+    </ul>
+@endif
+
+
+
+
+
     
-    <div class="row mt-4">
+<div class="row mt-4">
         <div class="col-12 text-center">
             <a href="{{ route('index') }}" class="btn btn-secondary">
                 العودة للصفحة الرئيسية

@@ -2,6 +2,12 @@
 @extends('layoutes.main') {{-- تأكد أن هذا الملف موجود في resources/views/layouts/admin.blade.php --}}
 
 @section('content')
+        <div class="container-fluid py-4"  style="background: linear-gradient(90deg, #f8fafc 0%, #e0e7ef 100%); border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 24px;">
+            <h1 style="font-size: 2.5rem; text-align: center; font-weight: bold; color: #344767; letter-spacing: 1px; text-shadow: 0 1px 2px rgba(52,71,103,0.08);">
+                Dashboard
+            </h1>
+        </div>
+
 <div class="container-fluid py-4">
     <div class="row mb-4">
         <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
@@ -67,6 +73,7 @@
         <!-- Category Card -->
         <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
             <div class="card shadow border-0">
+                <a class="text-decoration-none" href="{{ route('admin.categories.index') }}">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="icon icon-shape bg-info text-white rounded-circle shadow me-3">
@@ -78,11 +85,13 @@
                         </div>
                     </div>
                 </div>
+                </a>
             </div>
         </div>
         <!-- Products Card -->
         <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
             <div class="card shadow border-0">
+                <a class="text-decoration-none" href="{{ route('admin.products.index') }}">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="icon icon-shape bg-secondary text-white rounded-circle shadow me-3">
@@ -94,6 +103,7 @@
                         </div>
                     </div>
                 </div>
+                </a>
             </div>
         </div>
         <!-- End Products Card -->
@@ -135,6 +145,25 @@
             </div>
         </div>
         <!-- End Brands Card -->
+        <!-- Start Ads Card -->
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+            <div class="card shadow border-0">
+                <a class="text-decoration-none" href="{{ route('admin.ads.index') }}">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="icon icon-shape bg-info text-white rounded-circle shadow me-3">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted mb-1">الاعلانات</h6>
+                            <h3 class="mb-0">{{ $adsCount }}</h3>
+                        </div>
+                    </div>
+                </div>
+                </a>
+            </div>
+        </div>
+        <!-- End Ads Card -->
     </div>
 
     <!-- Add Category & Product Buttons -->
@@ -149,7 +178,10 @@
             <a href="{{ route('admin.brands.create') }}" class="btn btn-info mb-2">
                 <i class="fas fa-plus"></i> اضافة علامة تجارية جديدة
             </a>
-        </div>
+            <a href="{{ route('admin.ads.create') }}" class="btn btn-info mb-2">
+                <i class="fas fa-plus"></i> اضافة اعلان جديد
+                </a>
+            </div>
     </div>
 
     <!-- Charts Row -->

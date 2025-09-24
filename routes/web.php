@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
@@ -47,8 +48,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('brands', BrandController::class);
     // Product CRUD
     Route::resource('products', ProductController::class);
+    // Ad CRUD
+
+    Route::resource('ads', AdController::class);
 
     Route::get('/contacts', [ContactController::class, 'adminIndex'])->name('contacts.index');
+
+    Route::get('/show-category', [CategoryController::class, 'show'])->name('showcategory');
 
 
 });

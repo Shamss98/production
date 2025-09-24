@@ -21,13 +21,48 @@
                     onclick="changeMainImage(this)">
                 
                 <!-- Gallery Images -->
+            <div class="d-flex flex-wrap gap-2 justify-content-center">
                 @foreach($product->gallery_images as $galleryImage)
                     <img src="{{ asset('storage/' . $galleryImage) }}" 
                         alt="Gallery" 
                         class="img-thumbnail product-thumb" 
-                        style="width: 70px; height: 70px; cursor:pointer;" 
+                        style="
+                            width:70px; 
+                            height:70px; 
+                            object-fit:cover; 
+                            border-radius:8px; 
+                            transition:transform 0.2s ease, box-shadow 0.2s ease; 
+                            cursor:pointer;
+                        " 
                         onclick="changeMainImage(this)">
                 @endforeach
+            </div>
+
+            <style>
+                /* عند المرور بالماوس */
+                .product-thumb:hover {
+                    transform: scale(1.1);
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                }
+
+                /* شاشة الموبايل */
+                @media (max-width: 576px) {
+                    .product-thumb {
+                        width: 50px !important;
+                        height: 50px !important;
+                    }
+                }
+
+                /* تابلت */
+                @media (min-width: 577px) and (max-width: 768px) {
+                    .product-thumb {
+                        width: 60px !important;
+                        height: 60px !important;
+                    }
+                }
+        </style>
+
+                <!-- End Gallery Images -->
             </div>
         </div>
         <!-- Product Details -->

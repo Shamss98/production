@@ -92,6 +92,33 @@
         from { opacity: 0; transform: translateY(30px);}
         to { opacity: 1; transform: translateY(0);}
     }
+    @media (max-width: 768px) {
+        table {
+            width: 100%;
+            font-size: 14px;
+        }
+        th, td {
+            padding: 12px;
+        }
+        button, .btn {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+    }
+    @media (max-width: 480px) {
+        th, td {
+            padding: 8px;
+        }
+        input[type="number"] {
+            width: 50px;
+            padding: 4px;
+        }
+        button, .btn {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+    }
+
 </style>
 
 <h2>سلة التسوق</h2>

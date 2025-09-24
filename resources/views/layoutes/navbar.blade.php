@@ -44,6 +44,8 @@
             style="width: 150x; padding: 8px 10px; border: 1px solid #ccc; border-radius: 20px; font-size: 14px;">
     </form>
 </div>
+
+
             <ul class="links">
                 <li><a href="{{ route('index') }}">الرئيسية</a></li>
                 <li><a href="{{ route('products.index') }}">المنتجات</a></li>
@@ -94,7 +96,7 @@
                                 onmouseover="this.style.background='linear-gradient(90deg, #f59e42 0%, #f43f5e 100%)';this.style.borderColor='#f59e42';this.style.transform='scale(1.07)';this.style.boxShadow='0 4px 16px rgba(245,158,66,0.15)';"
                                 onmouseout="this.style.background='linear-gradient(90deg, #f43f5e 0%, #f59e42 100%)';this.style.borderColor='#f43f5e';this.style.transform='scale(1)';this.style.boxShadow='0 2px 8px rgba(244,63,94,0.08)';"
                             >
-                               <i class="fa-solid fa-right-from-bracket"></i>
+                               <i class="fas fa-right-from-bracket"></i>
                             </button>
                         </form>
                     </li>
