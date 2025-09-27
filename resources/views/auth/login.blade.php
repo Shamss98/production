@@ -72,10 +72,21 @@
             <label for="email">الايميل</label>
             <input id="email" type="email" name="email"  style="transition: box-shadow 0.2s;">
         </div>
+        @error('email')
+            <div class="text-danger" style="font-size: 0.9rem; margin-top: -12px; margin-bottom: 12px; animation: shake 0.5s;">
+                {{ $message }}
+            </div>
+            
+        @enderror
         <div style="animation: slideInRight 0.7s;">
             <label for="password">كلمة المرور</label>
             <input id="password" type="password" name="password" required style="transition: box-shadow 0.2s;">
         </div>
+        @error('password')
+            <div class="text-danger" style="font-size: 0.9rem; margin-top: -12px; margin-bottom: 12px; animation: shake 0.5s;">
+                {{ $message }}
+            </div>
+        @enderror
         <div style="animation: fadeInUp 0.7s;">
             <button type="submit" style="box-shadow: 0 2px 8px rgba(0,123,255,0.08); transition: transform 0.2s;">دخول</button>
         </div>

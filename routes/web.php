@@ -11,6 +11,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\CouponController;
 use App\Http\Controllers\ReviewController;
 use App\Models\Order;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -49,8 +50,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Product CRUD
     Route::resource('products', ProductController::class);
     // Ad CRUD
-
     Route::resource('ads', AdController::class);
+    // Offer CRUD
+    Route::resource('offers', \App\Http\Controllers\OfferController::class);
 
     Route::get('/contacts', [ContactController::class, 'adminIndex'])->name('contacts.index');
 
@@ -58,6 +60,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
 
 });
+
 
 
 
@@ -113,13 +116,23 @@ Route::middleware('auth')->group(function () {
         ->name('checkout.pay');
 
     // دفع السلة كلها
-    Route::get('/checkout/cart', [CheckoutController::class, 'payCart'])
+    Route::post('/checkout/cart', [CheckoutController::class, 'payCart'])
         ->name('checkout.cart');
+
+        
 });
 
-Route::get('/offers', [ProductController::class, 'isOffer'])->name('offers');
+// Range Price Route
+Route::get('/price-range', [ProductController::class, 'priceRange'])->name('price.range');
+
+Route::get('/best-offers', [ProductController::class, 'isOffer'])->name('best.offers');
 Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->name('products.reviews.store');
 
 // Contact routes
 Route::get('/contact', [App\Http\Controllers\ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');
+
+
+// Coupon routes
+Route::post('/coupon-apply', [App\Http\Controllers\CouponController::class, 'apply'])->name('coupon.apply');
+Route::post('/remove-coupon', [App\Http\Controllers\CouponController::class, 'remove'])->name('coupon.remove');

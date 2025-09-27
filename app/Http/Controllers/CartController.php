@@ -12,10 +12,30 @@ class CartController extends Controller
 {
      public function index()
     {
-        $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
-        $items = $cart->items()->with('product')->get();
+       $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
+    $items = $cart->items()->with('product')->get();
 
-        return view('cart.index', compact('cart', 'items'));
+    // إجمالي الكارت
+    $total = $items->sum(function ($item) {
+        return $item->price * $item->quantity;
+    });
+
+    // إعادة حساب الخصم كل مرة حسب الإجمالي الجديد
+    $discount = 0;
+    if (session()->has('coupon')) {
+        $coupon = session('coupon');
+        if ($coupon['type'] === 'percent') {
+            $discount = ($total * $coupon['value']) / 100;
+        } elseif ($coupon['type'] === 'fixed') {
+            $discount = $coupon['value'];
+        }
+    }
+
+    $finalTotal = max(0, $total - $discount);
+
+    return view('cart.index', compact('cart', 'items', 'total', 'discount', 'finalTotal'));
+
+
     }
 
     public function add(Request $request, $id)
@@ -32,9 +52,10 @@ class CartController extends Controller
             $cart->items()->create([
                 'product_id' => $id,
                 'quantity' => 1,
-                'price' => $product->price,
+                'price' => $product->final_price,
             ]);
         }
+        
 
         return redirect()->route('cart.index')->with('success', 'تمت إضافة المنتج للعربة!');
     }
@@ -47,15 +68,16 @@ class CartController extends Controller
         } else {
             $item->update(['quantity' => $request->quantity]);
         }
+        
 
         return redirect()->route('cart.index');
     }
 
     public function remove($id)
     {
+
         $item = CartItem::findOrFail($id);
         $item->delete();
-
         return redirect()->route('cart.index');
     }
 
@@ -65,7 +87,20 @@ class CartController extends Controller
         if ($cart) {
             $cart->items()->delete();
         }
-
+        session()->forget('coupon');
         return redirect()->route('cart.index');
     }
+//     public function addToCart(Request $request, $id)
+// {
+//     $product = Product::findOrFail($id);
+
+//     auth()->user()->cart()->create([
+//         'product_id' => $product->id,
+//         'price' => $product->final_price, // السعر بعد الخصم
+//         'quantity' => $request->input('quantity', 1),
+//     ]);
+
+//     return back()->with('success', 'تمت إضافة المنتج للسلة.');
+// }
+
 }

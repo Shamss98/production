@@ -7,6 +7,9 @@ use App\Models\User;
 use App\Models\Activity;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WelcomeMail;
+use Illuminate\Auth\Events\Registered;
 
 class UserController extends Controller
 {
@@ -43,7 +46,6 @@ class UserController extends Controller
             'activity' => 'Logged in',
             'status' => 'Success'
         ]);
-
         switch(Auth::user()->role){
             case 'admin':
                 return redirect()->route('admin.dashboard');
@@ -60,32 +62,38 @@ class UserController extends Controller
         return view('auth.register');
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:8',
-        ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
 
-        // تسجيل عملية تسجيل الحساب
-        Activity::create([
-            'user_id' => $user->id,
-            'activity' => 'User registered',
-            'status' => 'Success'
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'name' => 'required',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|min:8',
+    ]);
 
-        // تسجيل دخول المستخدم تلقائياً بعد التسجيل
-        Auth::login($user);
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+    ]);
 
-        return redirect()->route('index')->with('success', 'Registration successful. You are now logged in.');
-    }
+    // تسجيل عملية تسجيل الحساب
+    Activity::create([
+        'user_id' => $user->id,
+        'activity' => 'User registered',
+        'status' => 'Success'
+    ]);
+
+    // إطلاق الـ Registered event
+    event(new Registered($user));
+
+    // تسجيل الدخول للمستخدم
+    Auth::login($user);
+
+    return redirect()->route('index')->with('success', 'Registration successful. You are now logged in.');
+}
+
 
     public function profile()
     {

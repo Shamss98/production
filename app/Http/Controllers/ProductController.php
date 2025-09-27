@@ -132,9 +132,14 @@ public function viewproduct(){
 
 public function isOffer()
 {
-    $products = Product::isOffer()->get();
+    $products = Product::with('activeOffer')
+        ->whereHas('activeOffer')
+        ->latest()
+        ->paginate(12);
     return view('products.offers', compact('products'));
 }
+
+/*******  8fcc613f-9ebc-4507-9375-c7874a8ecdb2  *******/
 public function filterByBrand($categoryId, $brandId)
 {
     $category = Category::findOrFail($categoryId);
@@ -147,4 +152,11 @@ public function filterByBrand($categoryId, $brandId)
 
     return view('products.category', compact('category', 'products', 'brand'));
 }
+public function priceRange()
+{
+    $products = Product::priceRange()->latest()->paginate(12);
+    return view('products.pricerange', compact('products'));
+}
+
+
 }

@@ -85,7 +85,13 @@
                             </script>
                             @endpush
                             <p class="card-text mb-1" style="font-size: 0.93rem;">
-                                <strong class="text-primary">{{ number_format($product->price, 2) }} ريال</strong>
+                                @php($activeOffer = $product->activeOffer()->first())
+                                @if($activeOffer)
+                                    <strong class="text-danger">{{ number_format($product->effective_price, 2) }} ريال</strong>
+                                    <del class="text-muted" style="margin-right:6px;">{{ number_format($product->price, 2) }} ريال</del>
+                                @else
+                                    <strong class="text-primary">{{ number_format($product->price, 2) }} ريال</strong>
+                                @endif
                             </p>
                             <p class="card-text mb-1" style="font-size: 0.85rem;">
                                 <small class="text-muted">المخزون: {{ $product->stock }}</small>

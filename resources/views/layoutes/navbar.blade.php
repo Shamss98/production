@@ -49,7 +49,7 @@
             <ul class="links">
                 <li><a href="{{ route('index') }}">الرئيسية</a></li>
                 <li><a href="{{ route('products.index') }}">المنتجات</a></li>
-                <li><a href="{{ url('/offers') }}">العروض</a></li>
+                <li><a href="{{ url('/best-offers') }}">الخصومات</a></li>
                 <li><a href="{{ url('/contact') }}">اتصل بنا</a></li>
             </ul>
             <ul class="actions">

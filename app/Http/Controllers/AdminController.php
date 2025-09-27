@@ -40,6 +40,7 @@ class AdminController extends Controller
     $brandsCount = Brand::count();
     $adsCount = Ad::count();
 
+    $offersCount = DB::table('offers')->count();
     
     $topCategories = Category::withCount('products')
         ->orderBy('products_count', 'desc')
@@ -130,7 +131,8 @@ class AdminController extends Controller
         'userGrowth',
         'brandsCount',
         'contactsCount',
-        'adsCount'
+        'adsCount',
+        'offersCount'
 
     ));
 }
