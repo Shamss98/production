@@ -37,13 +37,19 @@
     src="https://dalilzag.com//uploads/2021/12/EVM4tSHxFYKuiaWwI1AP.jpg" alt="طرق الدفع">
 
     @auth
-        <form action="{{ route('checkout.cart') }}" method="POST">
-            @method('get')
-            @csrf
-            <button type="submit" class="btn btn-primary">
-                💳 ادفع الآن
-            </button>
-        </form>
+{{-- زر الدفع --}}
+<form action="{{ route('cart.pay') }}" method="POST">
+    @csrf
+    <button type="submit" class="btn btn-primary">
+        💳 ادفع الآن
+    </button>
+</form>
+
+{{-- رابط عرض السلة --}}
+<a href="{{ route('cart.show') }}" class="btn btn-secondary">
+    🛒 عرض السلة
+</a>
+
     @else
         <p class="mt-4 alert alert-warning">يرجى تسجيل الدخول لإتمام عملية الدفع.</p>
         <a href="{{ route('login') }}" class="btn btn-secondary">تسجيل الدخول</a>

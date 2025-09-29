@@ -30,7 +30,7 @@
     .animated-pulse { animation: pulse 2s infinite; }
     
     .hero-section {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #2246e4 0%, #764ba2 100%);
         border-radius: 20px;
         padding: 3rem 2rem;
         margin: 2rem 0;
@@ -173,7 +173,7 @@
         margin: 2rem 0;
     }
     .ad-card {
-        border-radius: 12px;
+        /* border-radius: 12px; */
         overflow: hidden;
         transition: all 0.3s ease;
         box-shadow: 0 4px 12px rgba(0,0,0,0.08);
@@ -186,7 +186,7 @@
     }
     .ad-image {
         width: 100%;
-        height: 250px;
+        height: 350px;
         object-fit: cover;
         transition: transform 0.5s ease;
     }
@@ -194,11 +194,12 @@
         transform: scale(1.05);
     }
     .ad-title {
-        padding: 1rem;
-        font-weight: 600;
-        color: #1e293b;
+        padding: 10px;
+        font-weight: 800;
+        color: #211e3b;
         text-align: center;
-        font-size: 1rem;
+        font-size: 1.2rem;
+        font-family: 'Cairo', sans-serif;
     }
     
     .section-title {
@@ -359,7 +360,7 @@
     }
 </style>
 
-<div class="container" style="max-width: 1750px; padding: 0 15px;">
+<div class="container" style="max-width: 98%; padding: 0 15px;">
     <!-- Hero Section -->
     <div class="hero-section animated-fadeIn">
         <div class="hero-content">

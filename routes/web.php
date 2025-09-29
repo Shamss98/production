@@ -54,9 +54,19 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Offer CRUD
     Route::resource('offers', \App\Http\Controllers\OfferController::class);
 
+    // Coupon Routes
+    Route::get('/coupons', [CouponController::class, 'index'])->name('coupons.index');
+    Route::get('/coupons/create', [CouponController::class, 'create'])->name('coupons.create');
+    Route::post('/coupons', [CouponController::class, 'store'])->name('coupons.store');
+    Route::get('/coupons/{coupon}/edit', [CouponController::class, 'edit'])->name('coupons.edit');
+    Route::put('/coupons/{coupon}', [CouponController::class, 'update'])->name('coupons.update');
+    Route::delete('/coupons/{coupon}', [CouponController::class, 'destroy'])->name('coupons.destroy');
+
+
     Route::get('/contacts', [ContactController::class, 'adminIndex'])->name('contacts.index');
 
     Route::get('/show-category', [CategoryController::class, 'show'])->name('showcategory');
+    Route::get('/coupons/report', [CouponController::class, 'report'])->name('admin.coupon.report');
 
 
 });
@@ -97,7 +107,6 @@ Route::middleware('auth')->group(function () {
 Route::post('/paymob/callback', function (Request $request) {
     $hmac = $request->header('hmac');
 
-    // ⚠️ هنا ممكن تضيف التحقق من HMAC (حسب docs Paymob)
     $order = Order::find($request->merchant_order_id);
 
     if ($request->success) {
@@ -111,15 +120,17 @@ Route::post('/paymob/callback', function (Request $request) {
 
 Route::middleware('auth')->group(function () {
 
-    // دفع منتج واحد (بـ ID المنتج)
-    Route::get('/checkout/{productId}', [CheckoutController::class, 'pay'])
-        ->name('checkout.pay');
+    // عرض السلة
+    Route::get('/checkout/cart', [CheckoutController::class, 'showCart'])
+        ->name('cart.show');
 
     // دفع السلة كلها
     Route::post('/checkout/cart', [CheckoutController::class, 'payCart'])
-        ->name('checkout.cart');
+        ->name('cart.pay');
 
-        
+    // دفع منتج واحد (بـ ID المنتج)
+    Route::get('/checkout/{productId}', [CheckoutController::class, 'pay'])
+        ->name('checkout.pay');
 });
 
 // Range Price Route
@@ -136,3 +147,5 @@ Route::post('/contact', [App\Http\Controllers\ContactController::class, 'store']
 // Coupon routes
 Route::post('/coupon-apply', [App\Http\Controllers\CouponController::class, 'apply'])->name('coupon.apply');
 Route::post('/remove-coupon', [App\Http\Controllers\CouponController::class, 'remove'])->name('coupon.remove');
+// User Get Coupons
+Route::get('/get-coupons', [App\Http\Controllers\CouponController::class, 'getCoupon'])->name('get.coupon');

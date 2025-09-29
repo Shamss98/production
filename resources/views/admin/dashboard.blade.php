@@ -197,6 +197,24 @@
                 </div>
             </a>
         </div>
+        {{-- Categories Card --}}
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 mb-3">
+            <a class="text-decoration-none" href="{{ route('admin.coupons.index') }}">
+                <div class="card stats-card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="icon icon-shape bg-info text-white rounded-circle shadow me-3">
+                                <i class="fa-solid fa-tag"></i>
+                            </div>
+                            <div>
+                                <p class="stats-label mb-0">كوبونات الخصم</p>
+                                <h3 class="stats-value mb-0"> {{ $couponsCount }} </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
 
         {{-- Products Card --}}
         <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 mb-3">

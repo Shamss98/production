@@ -38,4 +38,9 @@ class Coupon extends Model
         }
         return $orderTotal;
     }
+public function users()
+{
+    return $this->belongsToMany(User::class, 'coupon_user')->withTimestamps();
+}
+
 }

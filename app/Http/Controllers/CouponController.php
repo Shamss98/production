@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\cart;
 use App\Models\Coupon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CouponController extends Controller
 {
@@ -33,6 +34,11 @@ class CouponController extends Controller
             return back()->with('error', 'تم تطبيق كوبون بالفعل.');
         }
 
+        if($coupon->users()->where('user_id', Auth::id())->exists()) {
+            return back()->with('error', 'لا يمكن استخدام هذا الكوبون.');
+            
+        }
+
         $newTotal = $coupon->applyDiscount($cartTotal);
 
         session()->put('coupon', [
@@ -41,6 +47,8 @@ class CouponController extends Controller
             'value' => $coupon->value,
             'discounted_total' => $newTotal,
         ]);
+
+        $coupon->users()->attach(Auth::id());
 
         $coupon->increment('used');
 
@@ -56,4 +64,59 @@ class CouponController extends Controller
 
         return back()->with('error', 'لا يوجد كوبون لتلغيه.');
     }
+
+public function report()
+{
+    $coupons = Coupon::with('users')->get();
+
+    return view('admin.coupons.report', compact('coupons'));
+}
+public function index()
+{
+    $coupons = Coupon::with('users')->latest()->paginate(10);
+    return view('admin.coupons.index', compact('coupons'));
+}
+public function create()
+{
+    return view('admin.coupons.create');
+    
+}
+public function store(Request $request)
+{
+    $request->validate([
+        'code' => 'required|string|unique:coupons',
+        'type' => 'required|string',
+        'value' => 'required|numeric',
+        'min_order_value' => 'required|numeric',
+        'max_uses' => 'required|numeric',
+    ]);
+    $coupon = Coupon::create($request->all());
+    return redirect()->route('admin.coupons.index')->with('success', 'تم اضافة الكوبون بنجاح');
+}
+public function edit(Coupon $coupon)
+{
+    return view('admin.coupons.edit', compact('coupon'));
+}
+public function update(Request $request, Coupon $coupon)
+{
+    $request->validate([
+        'code' => 'required|string|unique:coupons,code,' . $coupon->id,
+        'type' => 'required|string',
+        'value' => 'required|numeric',
+        'min_order_value' => 'required|numeric',
+        'max_uses' => 'required|numeric',
+    ]);
+    $coupon->update($request->all());
+    return redirect()->route('admin.coupons.index')->with('success', 'تم تعديل الكوبون بنجاح');
+}
+public function destroy(Coupon $coupon)
+{
+    $coupon->delete();
+    return redirect()->route('admin.coupons.index')->with('success', 'تم حذف الكوبون بنجاح');
+}
+public function getCoupon()
+{
+    $coupons = Coupon::where('code', 'SHAMS10')->get(); 
+    return view('coupons.index')->with('coupons', $coupons);
+}
 }

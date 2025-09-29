@@ -423,7 +423,7 @@
                         </td>
                         <td>
                             <a class="product-name" href="{{ route('viewproducts', $item->product->id) }}">
-                                {{ $item->product->name }}
+                                {{ Str::limit(  $item->product->name , 10) }}
                             </a>
                         </td>
                         <td>
@@ -485,7 +485,7 @@
         <div class="cart-summary">
             <div class="total-section">
                 <span class="total-label">الإجمالي:</span>
-                <span class="total-value">{{ $total }}</span>
+                <span class="total-value">{{round($total)}}</span>
             </div>
 
             @if(session()->has('coupon'))
@@ -494,12 +494,14 @@
                     <span class="total-value discounted-total">- {{ $discount }}</span>
                 </div>
             @endif
-
+            @if (session()->has('coupon'))
+                
+          
             <div class="total-section">
                 <span class="total-label">السعر بعد الخصم:</span>
                 <span class="total-value">{{ $finalTotal }}</span>
             </div>
-
+            @endif
             <form action="{{ route('coupon.apply') }}" method="POST" class="coupon-section">
                 @csrf
                 <input type="text" name="code" placeholder="أدخل كود الخصم" class="coupon-input">

@@ -4,9 +4,7 @@
 
 @section('content')
 <style>
-    /* -------------------------------------- */
-    /* 1. General Page Styling */
-    /* -------------------------------------- */
+
     body {
         background-color: #f7f9fc; /* خلفية فاتحة وناعمة */
     }
@@ -90,9 +88,7 @@
         border-color: #0056b3;
     }
     
-    /* -------------------------------------- */
-    /* 3. Custom Pagination Styling (Cleaned up from inline) */
-    /* -------------------------------------- */
+
     .custom-pagination {
         list-style: none;
         display: flex;
@@ -139,9 +135,7 @@
         cursor: not-allowed;
     }
 
-    /* -------------------------------------- */
-    /* 4. Not Found Message */
-    /* -------------------------------------- */
+
     .not-found-message {
         padding: 40px;
         background: #fff;

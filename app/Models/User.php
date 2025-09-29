@@ -57,5 +57,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Review::class);
     }
+    public function coupons()
+{
+    return $this->belongsToMany(Coupon::class, 'coupon_user')->withTimestamps();
+}
+
     
 }
