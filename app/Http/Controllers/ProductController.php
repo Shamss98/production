@@ -18,12 +18,15 @@ class ProductController extends Controller
         return view('products.index', compact('products'));
     }
 
-    public function showByCategory($categoryId)
-    {
-        $category = Category::with('products')->findOrFail($categoryId);
-        $products = Product::where('category_id', $categoryId)->latest()->paginate(12);
-        return view('products.category', compact('category', 'products'));
-    }
+public function showByCategory($categoryId)
+{
+    $category = Category::findOrFail($categoryId);
+    $products = $category->products()->latest()->paginate(12);
+
+    return view('products.category', compact('category', 'products'));
+}
+
+
 
     public function create()
     {

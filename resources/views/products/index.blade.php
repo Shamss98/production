@@ -133,55 +133,7 @@
                     </li>
                 @endif
 
-                {{-- Pagination Elements --}}
-                @foreach ($products->links()->elements as $element)
-                    {{-- "Three Dots" Separator --}}
-                    @if (is_string($element))
-                        <li style="padding: 6px 12px; border: 1px solid #ddd; border-radius: 6px; color: #aaa; margin: 2px;">
-                            <span style="display: block;">{{ $element }}</span>
-                        </li>
-                    @endif
-
-                    {{-- Array Of Links --}}
-                    @if (is_array($element))
-                        @foreach ($element as $page => $url)
-                            @if ($page == $products->currentPage())
-                                <li style="padding: 6px 12px; border: 1px solid #007bff; border-radius: 6px; background: #007bff; color: #fff; font-weight: bold; margin: 2px;">
-                                    <span style="display: block;">{{ $page }}</span>
-                                </li>
-                            @else
-                                <li>
-                                    <a href="{{ $url }}" 
-                                    style="padding: 6px 12px; border: 1px solid #ddd; border-radius: 6px; color: #333; text-decoration: none; display: block; transition: background-color 0.2s;"
-                                    onmouseover="this.style.backgroundColor='#f8f9fa'"
-                                    onmouseout="this.style.backgroundColor='transparent'">
-                                    {{ $page }}
-                                    </a>
-                                </li>
-                            @endif
-                        @endforeach
-                    @endif
-                @endforeach
-
-                {{-- Next Page Link --}}
-                @if ($products->hasMorePages())
-                    <li>
-                        <a href="{{ $products->nextPageUrl() }}" rel="next" 
-                           style="padding: 6px 12px; border: 1px solid #ddd; border-radius: 6px; color: #333; text-decoration: none; display: block; transition: background-color 0.2s;"
-                           onmouseover="this.style.backgroundColor='#f8f9fa'"
-                           onmouseout="this.style.backgroundColor='transparent'">
-                           &rsaquo;
-                        </a>
-                    </li>
-                @else
-                    <li style="padding: 6px 12px; border: 1px solid #ddd; border-radius: 6px; color: #aaa; margin: 2px;">
-                        <span style="display: block;">&rsaquo;</span>
-                    </li>
-                @endif
-            </ul>
-        </div>
-    @endif
-    {{-- End Pagination Links --}}
+{{ $products->links('vendor.pagination.custom') }}
 
     
     <div class="row mt-4">

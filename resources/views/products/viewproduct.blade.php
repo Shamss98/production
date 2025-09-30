@@ -119,11 +119,17 @@
                             @php($activeOffer = $related->activeOffer()->first())
                             @if($activeOffer)
                                 <p style="font-size: 1rem; font-weight: 700; margin-bottom: 10px;">
-                                    <span style="color: #dc3545;">${{ number_format($related->effective_price, 2) }}</span>
-                                    <del style="color: #6c757d; margin-right:6px; font-weight: 400;">${{ number_format($related->price, 2) }}</del>
+                                    <span style="color: #dc3545;">
+                                        {{ number_format($related->final_price, 2) }} L.E
+                                    </span>
+                                    <del style="color: #6c757d; margin-right:6px; font-weight: 400;">
+                                        {{ number_format($activeOffer->old_price ?? $related->price, 2) }} L.E
+                                    </del>
                                 </p>
                             @else
-                                <p style="color: #28a745; font-size: 1rem; font-weight: 700; margin-bottom: 10px;">${{ number_format($related->price, 2) }}</p>
+                                <p style="color: #28a745; font-size: 1rem; font-weight: 700; margin-bottom: 10px;">
+                                    {{ number_format($related->price, 2) }} L.E
+                                </p>
                             @endif
                             
                             <div style="margin-bottom: 10px;"><x-rating/></div>
@@ -185,6 +191,7 @@
                 </div>
             </div>
             
+            <!-- comments -->
             <div style="min-width: 300px; flex: 1 1 300px;">
                 <h2 style="font-size: 1.8rem; font-weight: bold; color: #0d6efd; margin-bottom: 20px;">التعليقات ({{ $product->reviews->count() }})</h2>
                 @forelse($product->reviews as $review)

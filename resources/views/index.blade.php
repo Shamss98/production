@@ -488,7 +488,7 @@
                                     
                                     <div class="price-section">
                                     @php($activeOffer = $product->activeOffer()->first())
-                                @if($product->activeOffer)
+                                @if($activeOffer)
                                     <p>
                                         <del class="text-success mb-3" style="color: #28a745; font-size: 0.9rem; font-weight: 700; ">{{ number_format($product->activeOffer->old_price, 2) }} L.E</del>
                                         <span style="color: rgb(201, 31, 1); font-size: 0.9rem; font-weight: 700;">{{ number_format($product->final_price, 2) }} L.E</span>
