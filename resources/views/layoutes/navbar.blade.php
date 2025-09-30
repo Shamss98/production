@@ -102,7 +102,7 @@
                     </li>
                 @else
                     <li><a href="{{ url('/login') }}">تسجيل الدخول</a></li>
-                    <li><a href="{{ url('/register') }}">انشاء حساب</a></li>
+                    {{-- <li><a href="{{ url('/register') }}">انشاء حساب</a></li> --}}
                 @endauth
             </ul>
         </div>

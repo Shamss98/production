@@ -134,6 +134,7 @@
                 @endif
 
 {{ $products->links('vendor.pagination.custom') }}
+    @endif
 
     
     <div class="row mt-4">
