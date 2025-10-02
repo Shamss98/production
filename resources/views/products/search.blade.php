@@ -98,7 +98,7 @@
                         </a>
                         <div class="card-body">
                             <h5>{{ $product->name }}</h5>
-                            <p>${{ $product->price }}</p>
+                            <p>{{ $product->price }} L.E</p>
                         </div>
                     </div>
                 </div>
@@ -106,7 +106,7 @@
         </div>
 
         <div class="d-flex justify-content-center mt-4">
-            {{ $products->links() }} <!-- الباجيناشن -->
+            {{ $products->links('vendor.pagination.custom') }}
         </div>
     @else
         <p class="no-products">No products found.</p>

@@ -15,17 +15,17 @@
             @foreach($products as $product)
                 {{-- Product Card Container --}}
                 <div class="col">
-                    <div class="card h-100 d-flex flex-column" 
+                    <div class="card h-100 d-flex flex-column"
                         style="background-color: #ffffff; border: 1px solid #e9ecef; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: all 0.3s ease-in-out; overflow: hidden; height: 100%; cursor: pointer;"
                         onmouseover="this.style.transform='translateY(-5px) scale(1.02)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.15)'"
                         onmouseout="this.style.transform='translateY(0) scale(1.0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)'">
-                        
+
                         {{-- Product Image Section --}}
-                        @if($product->image) 
+                        @if($product->image)
                             <a href="{{ route('viewproducts', $product->id) }}" style="text-decoration: none;">
                                 <div style="height: 120px; display: flex; align-items: center; justify-content: center; background-color: #f8f9fa; border-bottom: 1px solid #e9ecef;">
-                                    <img src="{{ asset('storage/' . $product->image) }}" 
-                                        alt="{{ $product->name }}" 
+                                    <img src="{{ asset('storage/' . $product->image) }}"
+                                        alt="{{ $product->name }}"
                                         style="max-width: 90%; max-height: 100px; object-fit: contain; padding: 10px;"
                                         onerror="this.style.display='none'">
                                 </div>
@@ -34,19 +34,19 @@
 
                         {{-- Card Body Section --}}
                         <div class="card-body text-center d-flex flex-column p-3" style="flex: 1 1 auto; justify-content: space-between;">
-                            
+
                             {{-- Product Name --}}
-                            <h6 class="card-title text-truncate mb-2" 
-                                style="font-size: 1rem; font-weight: 600; color: #343a40; max-width: 100%;" 
+                            <h6 class="card-title text-truncate mb-2"
+                                style="font-size: 1rem; font-weight: 600; color: #343a40; max-width: 100%;"
                                 title="{{ $product->name }}">
-                                <a href="{{ route('viewproducts', $product->id) }}" 
+                                <a href="{{ route('viewproducts', $product->id) }}"
                             style="text-decoration: none; color: inherit;">
                                     <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $product->name }}">
                                         {{ Str::limit($product->name, 25) }}
                                     </span>
                                 </a>
                             </h6>
-                            
+
                             {{-- Price Information --}}
                             <div class="mb-2">
                                 @php($activeOffer = $product->activeOffer()->first())
@@ -68,17 +68,17 @@
                                 @endif
                                 <small>المخزون: {{ $product->stock }}</small>
                             </p>
-                            
+
                             {{-- Rating Component --}}
                             <div class="mb-2">
                                 <x-rating/>
                             </div>
-                            
+
                             {{-- Add to Cart Form --}}
                             <form action="{{ route('cart.add', $product->id) }}" method="POST" style="display:block;">
                                 @csrf
-                                <button type="submit" 
-                                    class="btn w-100" 
+                                <button type="submit"
+                                    class="btn w-100"
                                     style="background-color: #28a745; color: #ffffff; border: none; font-size: 0.9rem; padding: 8px 0; border-radius: 6px; font-weight: 600; transition: background-color 0.2s;"
                                     onmouseover="this.style.backgroundColor='#218838'"
                                     onmouseout="this.style.backgroundColor='#28a745'">
@@ -111,35 +111,12 @@
     @endpush
 
 
-
-    {{-- Pagination Links --}}
-    @if ($products->hasPages())
-        <div class="d-flex justify-content-center mt-5">
-            <ul class="pagination" style="list-style:none; display:flex; gap:4px; padding:0; margin:0; justify-content:center; font-size:14px; flex-wrap: wrap;">
-                
-                {{-- Previous Page Link --}}
-                @if ($products->onFirstPage())
-                    <li style="padding: 6px 12px; border: 1px solid #ddd; border-radius: 6px; color: #aaa; margin: 2px;">
-                        <span style="display: block;">&lsaquo;</span>
-                    </li>
-                @else
-                    <li>
-                        <a href="{{ $products->previousPageUrl() }}" rel="prev" 
-                        style="padding: 6px 12px; border: 1px solid #ddd; border-radius: 6px; color: #333; text-decoration:none; display: block; transition: background-color 0.2s;"
-                        onmouseover="this.style.backgroundColor='#f8f9fa'"
-                        onmouseout="this.style.backgroundColor='transparent'">
-                        &lsaquo;
-                        </a>
-                    </li>
-                @endif
-
 {{ $products->links('vendor.pagination.custom') }}
-    @endif
 
-    
+
     <div class="row mt-4">
         <div class="col-12 text-center">
-            <a href="{{ route('index') }}" 
+            <a href="{{ route('index') }}"
             class="btn btn-secondary"
             style="background-color: #6c757d; color: #fff; border-color: #6c757d; padding: 10px 20px; border-radius: 8px; font-weight: 600; text-decoration: none; transition: background-color 0.2s;"
             onmouseover="this.style.backgroundColor='#5a6268'"
