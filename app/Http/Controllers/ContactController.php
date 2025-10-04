@@ -2,34 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ContactStoreRequest;
 use App\Models\Contact;
+use App\Services\Contact\ContactService;
 use Illuminate\Http\Request;
 
 class ContactController extends Controller
+
 {
-    
+protected $contactService;
+
+        public function __construct(ContactService $contactService)
+    {
+        $this->contactService = $contactService;
+    }
+       public function adminIndex()
+    {
+        $contacts = $this->contactService->getAdminIndex();
+        return view('admin.contacts.index', compact('contacts'));
+    }
+
     public function index()
     {
         return view('contact.index');
     }
 
-    // تخزين الرسالة
-    public function store(Request $request)
+    public function store(ContactStoreRequest $request)
     {
-        $request->validate([
-            'name'    => 'required|string|max:255',
-            'email'   => 'required|email',
-            'message' => 'required|string',
-        ]);
 
-        Contact::create($request->all());
+            $this->contactService->store($request->validated());
 
         return redirect()->back()->with('success', 'تم إرسال رسالتك بنجاح ✅');
     }
-    public function adminIndex()
-    {
-        $contacts = Contact::latest()->paginate(10);
-        Contact::where('created_at', '<', now()->subDays(2))->delete(); 
-        return view('admin.contacts.index', compact('contacts'));
-    }
+
 }

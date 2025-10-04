@@ -2,41 +2,44 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BrandStoreRequest;
+use App\Http\Requests\BrandUpdateRequest;
+use App\Models\Activity;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Services\Brand\BrandService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BrandController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+    protected $BrandService;
+
+    public function __construct(BrandService $BrandService)
+    {
+        $this->BrandService = $BrandService;
+    }
     public function index()
     {
-        $brands = Brand::with('category')->latest()->paginate(10);
+        $brands = $this->BrandService->getBrands();
         return view('admin.brands.index', compact('brands'));
     }
-
     public function create()
     {
         $categories = Category::all();
         return view('admin.brands.create', compact('categories'));
+
+
     }
 
-    public function store(Request $request)
+    public function store(BrandStoreRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'image' => 'nullable|image',
-            'category_id' => 'required|exists:categories,id',
-        ]);
-
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('brands', 'public');
-        }
-
-        Brand::create($validated);
-
+        $this->BrandService->store(
+        $request->validated() + [
+        'image' => $request->file('image')->store('brands', 'public')
+    ]
+);
         return redirect()->route('admin.brands.index')->with('success', 'Brand created successfully');
     }
     public function edit(Brand $brand)
@@ -44,19 +47,16 @@ class BrandController extends Controller
         $categories = Category::all();
         return view('admin.brands.edit', compact('brand', 'categories'));
     }
-    public function update(Request $request, Brand $brand)
+
+
+
+    public function update(BrandUpdateRequest $request, Brand $brand)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'image' => 'nullable|image',
-            'category_id' => 'required|exists:categories,id',
-        ]);
+        $data = $request->validated();
 
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('brands', 'public');
+            $data['image'] = $request->file('image')->store('brands', 'public');
         }
-
-        $brand->update($validated);
 
         return redirect()->route('admin.brands.index')->with('success', 'Brand updated successfully');
     }

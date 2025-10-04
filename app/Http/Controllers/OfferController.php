@@ -2,15 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OfferStoreRequest;
+use App\Http\Requests\OfferUpdateRequest;
+use App\Models\Activity;
 use App\Models\Offer;
 use App\Models\Product;
+use App\Services\Offer\OfferService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OfferController extends Controller
 {
+    protected $OfferService;
+
+    public function __construct(OfferService $OfferService)
+    {
+        $this->OfferService = $OfferService;
+    }
     public function index()
     {
-        $offers = Offer::with('product')->latest()->paginate(10);
+        $this->OfferService->getOffers();
         return view('admin.offers.index', compact('offers'));
     }
 
@@ -20,17 +31,9 @@ class OfferController extends Controller
         return view('admin.offers.create', compact('products'));
     }
 
-    public function store(Request $request)
+    public function store(OfferStoreRequest $request)
     {
-        $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'old_price'  => 'required|numeric|min:0',
-            'new_price'  => 'required|numeric|min:0|lt:old_price',
-            'start_date' => 'nullable|date',
-            'end_date'   => 'nullable|date|after_or_equal:start_date',
-        ]);
-
-        Offer::create($request->all());
+        $this->OfferService->store($request->validated());
 
         return redirect()->route('admin.offers.index')
             ->with('success', 'تم إضافة العرض بنجاح');
@@ -42,17 +45,9 @@ class OfferController extends Controller
         return view('admin.offers.edit', compact('offer','products'));
     }
 
-    public function update(Request $request, Offer $offer)
+    public function update(OfferUpdateRequest $request, Offer $offer)
     {
-        $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'old_price'  => 'required|numeric|min:0',
-            'new_price'  => 'required|numeric|min:0|lt:old_price',
-            'start_date' => 'nullable|date',
-            'end_date'   => 'nullable|date|after_or_equal:start_date',
-        ]);
-
-        $offer->update($request->all());
+        $this->OfferService->update($request->validated(), $offer);
 
         return redirect()->route('admin.offers.index')
             ->with('success', 'تم تحديث العرض بنجاح');
@@ -60,7 +55,7 @@ class OfferController extends Controller
 
     public function destroy(Offer $offer)
     {
-        $offer->delete();
+        $this->OfferService->destroy($offer);
         return redirect()->route('admin.offers.index')
             ->with('success', 'تم حذف العرض بنجاح');
     }

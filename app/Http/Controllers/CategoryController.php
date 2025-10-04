@@ -2,16 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryStoreRequest;
+use App\Http\Requests\CategoryUpdateRequest;
 use App\Models\Category;
+use App\Services\Category\CategoryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
+    protected $CategoryService;
+
+    public function __construct(CategoryService $CategoryService)
+    {
+        $this->CategoryService = $CategoryService;
+    }
     public function index()
     {
-        $categories = Category::latest()->paginate(12);
+        $categories = $this->CategoryService->getCategories();
         if (request()->routeIs('admin.*')) {
             return view('admin.categories.index', compact('categories'));
         }
@@ -23,24 +32,11 @@ class CategoryController extends Controller
         return view('admin.categories.create');
     }
 
-    public function store(Request $request)
+    public function store(CategoryStoreRequest $request )
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'image' => ['nullable', 'image'],
-            'slug' => ['nullable', 'string', 'max:255', 'unique:categories,slug'],
-        ]);
+        $this->CategoryService->store($request->validated() + 
+        ['image' => $request->file('image')->store('categories', 'public')]);
 
-        if (!$validated['slug'] ?? false) {
-            $validated['slug'] = Str::slug($validated['name']);
-        }
-
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('categories', 'public');
-        }
-
-        Category::create($validated);
         return redirect()->route('admin.categories.index')->with('success', 'Category created');
     }
 
@@ -49,30 +45,19 @@ class CategoryController extends Controller
         return view('admin.categories.edit', compact('category'));
     }
 
-    public function update(Request $request, Category $category)
+    public function update(CategoryUpdateRequest $request, Category $category, $data)
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'image' => ['nullable', 'image'],
-            'slug' => ['nullable', 'string', 'max:255', Rule::unique('categories', 'slug')->ignore($category->id)],
-        ]);
+    $this->CategoryService->update($request->validated() +
+    ['image' => $request->file('image')->store('categories', 'public')], $category);
 
-        if (!$validated['slug'] ?? false) {
-            $validated['slug'] = Str::slug($validated['name']);
-        }
-
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('categories', 'public');
-        }
-
-        $category->update($validated);
+        $category->update($data);
         return redirect()->route('admin.categories.index')->with('success', 'Category updated');
     }
 
     public function destroy(Category $category)
     {
-        $category->delete();
+        $this->CategoryService->destroy($category);
         return redirect()->route('admin.categories.index')->with('success', 'Category deleted');
     }
 }
+

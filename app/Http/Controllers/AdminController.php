@@ -17,13 +17,16 @@ class AdminController extends Controller
     public function dashboard()
 {
 
-    Activity::where('created_at', '<', now()->subMinutes(10))->delete();
+//    Activity::where('created_at', '<', now()->subMinutes(10))->delete();
 
-    
+
+
+
     $totalUsers = User::count();
     $newUsersThisMonth = User::whereMonth('created_at', now()->month)->count();
     $newUsersThisWeek = User::whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->count();
     $activeUsers = User::where('created_at', '>=', now()->subDays(30))->count();
+
 
 
     $totalProducts = Product::count();
@@ -31,7 +34,7 @@ class AdminController extends Controller
     $lowStockProducts = Product::where('stock', '<=', 10)->count();
     $outOfStockProducts = Product::where('stock', 0)->count();
 
-    
+
     $totalCategories = Category::count();
     $categoriesWithProducts = Category::has('products')->count();
     $emptyCategories = Category::doesntHave('products')->count();
@@ -43,43 +46,43 @@ class AdminController extends Controller
     $offersCount = DB::table('offers')->count();
 
     $couponsCount = DB::table('coupons')->count();
-    
+
     $topCategories = Category::withCount('products')
         ->orderBy('products_count', 'desc')
         ->paginate(5);
 
-    
+
     $recentProducts = Product::with('category')
         ->latest()
         ->take(6)
         ->get();
 
-    
+
     $recentUsers = User::latest()
         ->take(6)
         ->get();
 
-    
+
     $monthlyUsers = User::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
         ->whereYear('created_at', now()->year)
         ->groupBy('month')
         ->orderBy('month')
         ->get();
 
-    
+
     $monthlyProducts = Product::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
         ->whereYear('created_at', now()->year)
         ->groupBy('month')
         ->orderBy('month')
         ->get();
 
-    
+
     $totalRevenue = Product::sum('price');
     $averageProductPrice = Product::avg('price');
     $mostExpensiveProduct = Product::orderBy('price', 'desc')->first();
     $cheapestProduct = Product::orderBy('price', 'asc')->first();
 
-    
+
     $recentActivities = Activity::with('user')
         ->latest()
         ->take(10)
@@ -93,12 +96,12 @@ class AdminController extends Controller
         ->distinct('user_id')
         ->count('user_id');
 
-        // Message For Contacts 
+        // Message For Contacts
         $contactsCount = Contact::count();
 
-        $totalUsersNow = User::count(); 
+        $totalUsersNow = User::count();
         $totalUsersLastWeek = User::where('created_at', '<', now()->subWeek())->count();
-        
+
         if ($totalUsersLastWeek > 0) {
             $userGrowth = (($totalUsersNow - $totalUsersLastWeek) / $totalUsersLastWeek) * 100;
         } else {
@@ -144,4 +147,4 @@ class AdminController extends Controller
 /*******  5586e46d-8a5f-4295-917f-0b0444afa29c  *******/
 
 
-} 
+}

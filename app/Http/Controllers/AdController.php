@@ -3,14 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AdStoreRequest;
+use App\Http\Requests\AdUpdateRequest;
 use App\Models\Ad;
+use App\Services\Ad\AdService;
 use Illuminate\Http\Request;
 
 class AdController extends Controller
 {
+    protected $AdService;
+
+    public function __construct(AdService $AdService)
+    {
+        $this->AdService = $AdService;
+    }
     public function index()
     {
-        $ads = Ad::latest()->get();
+        $ads = $this->AdService->getAds();
         return view('admin.ads.index', compact('ads'));
     }
 
@@ -19,22 +28,9 @@ class AdController extends Controller
         return view('admin.ads.create');
     }
 
-    public function store(Request $request)
+    public function store(AdStoreRequest $request)
     {
-        $request->validate([
-            'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-            'title' => 'nullable|string|max:255',
-            'link' => 'nullable|url'
-        ]);
-
-        $path = $request->file('image')->store('ads', 'public');
-
-        Ad::create([
-            'title' => $request->title,
-            'image' => $path,
-            'link'  => $request->link,
-            'status'=> $request->status ?? 1,
-        ]);
+    $this->AdService->store($request->validated() + ['image' => $request->file('image')->store('ads', 'public')]);
 
         return redirect()->route('admin.ads.index')->with('success', 'تمت إضافة الإعلان بنجاح');
     }
@@ -44,28 +40,16 @@ class AdController extends Controller
         return view('admin.ads.edit', compact('ad'));
     }
 
-    public function update(Request $request, Ad $ad)
-    {
-        $request->validate([
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'title' => 'nullable|string|max:255',
-            'link' => 'nullable|url'
-        ]);
-
-        $data = $request->only(['title','link','status']);
-
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('ads', 'public');
-        }
-
-        $ad->update($data);
+    public function update(AdUpdateRequest $request, Ad $ad)
+        {
+        $this->AdService->update($request->validated() + ['image' => $request->file('image')->store('ads', 'public')]);
 
         return redirect()->route('admin.ads.index')->with('success', 'تم تعديل الإعلان بنجاح');
     }
 
     public function destroy(Ad $ad)
     {
-        $ad->delete();
+        $this->AdService->destroy($ad);
         return redirect()->route('admin.ads.index')->with('success', 'تم حذف الإعلان بنجاح');
     }
 }

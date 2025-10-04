@@ -2,58 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ApplyCouponRequest;
+use App\Http\Requests\CouponStoreRequest;
+use App\Http\Requests\CouponUpdateRequest;
 use App\Models\cart;
 use App\Models\Coupon;
+use App\Services\Coupon\CouponService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CouponController extends Controller
 {
-    public function apply(Request $request)
+    protected $couponService;
+
+    public function __construct(CouponService $couponService)
     {
-        $request->validate([
-            'code' => 'required|string'
-        ]);
-
-        $coupon = Coupon::where('code', $request->code)->first();
-
-        if (!$coupon) {
-            return back()->with('error', 'الكوبون غير صحيح.');
-        }
-
-
-        $cartTotal =  $request->cart_total;
-
-        if (!$coupon->isValid($cartTotal)) {
-        return back()->with('error', 'لا يمكن استخدام هذا الكوبون. الحد الأدنى للطلب هو ' . $coupon->min_order_value . ' جنيه.');
-        }
-
-
-
-        if (session()->has('coupon')) {
-            return back()->with('error', 'تم تطبيق كوبون بالفعل.');
-        }
-
-        if($coupon->users()->where('user_id', Auth::id())->exists()) {
-            return back()->with('error', 'لا يمكن استخدام هذا الكوبون.');
-            
-        }
-
-        $newTotal = $coupon->applyDiscount($cartTotal);
-
-        session()->put('coupon', [
-            'code' => $coupon->code,
-            'type' => $coupon->type,
-            'value' => $coupon->value,
-            'discounted_total' => $newTotal,
-        ]);
-
-        $coupon->users()->attach(Auth::id());
-
-        $coupon->increment('used');
-
-        return back()->with('success', "تم تطبيق الكوبون. الإجمالي الجديد: $newTotal");
+        $this->couponService = $couponService;
     }
+    public function apply(ApplyCouponRequest $request)
+    {
+        $data = $request->validated();
+
+        $result = $this->couponService->apply($data['code'], $data['cart_total']);
+
+        return back()->with($result['status'], $result['message']);
+    }
+
 
     public function remove()
     {
@@ -79,44 +53,30 @@ public function index()
 public function create()
 {
     return view('admin.coupons.create');
-    
+
 }
-public function store(Request $request)
+public function store(CouponStoreRequest $request)
 {
-    $request->validate([
-        'code' => 'required|string|unique:coupons',
-        'type' => 'required|string',
-        'value' => 'required|numeric',
-        'min_order_value' => 'required|numeric',
-        'max_uses' => 'required|numeric',
-    ]);
-    $coupon = Coupon::create($request->all());
+    $this->couponService->store($request->validated());
     return redirect()->route('admin.coupons.index')->with('success', 'تم اضافة الكوبون بنجاح');
 }
 public function edit(Coupon $coupon)
 {
     return view('admin.coupons.edit', compact('coupon'));
 }
-public function update(Request $request, Coupon $coupon)
+public function update(CouponUpdateRequest $request, Coupon $coupon)
 {
-    $request->validate([
-        'code' => 'required|string|unique:coupons,code,' . $coupon->id,
-        'type' => 'required|string',
-        'value' => 'required|numeric',
-        'min_order_value' => 'required|numeric',
-        'max_uses' => 'required|numeric',
-    ]);
-    $coupon->update($request->all());
+    $this->couponService->update($request->validated(), $coupon);
     return redirect()->route('admin.coupons.index')->with('success', 'تم تعديل الكوبون بنجاح');
 }
 public function destroy(Coupon $coupon)
 {
-    $coupon->delete();
+    $this->couponService->destroy($coupon);
     return redirect()->route('admin.coupons.index')->with('success', 'تم حذف الكوبون بنجاح');
 }
 public function getCoupon()
 {
-    $coupons = Coupon::where('code', 'SHAMS10')->get(); 
+   $coupons =  $this->couponService->getCoupon();
     return view('coupons.index')->with('coupons', $coupons);
 }
 }

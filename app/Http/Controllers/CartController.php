@@ -55,7 +55,7 @@ class CartController extends Controller
                 'price' => $product->final_price,
             ]);
         }
-        
+
 
         return redirect()->route('cart.index')->with('success', 'تمت إضافة المنتج للعربة!');
     }
@@ -68,7 +68,7 @@ class CartController extends Controller
         } else {
             $item->update(['quantity' => $request->quantity]);
         }
-        
+
 
         return redirect()->route('cart.index');
     }
@@ -90,17 +90,6 @@ class CartController extends Controller
         session()->forget('coupon');
         return redirect()->route('cart.index');
     }
-//     public function addToCart(Request $request, $id)
-// {
-//     $product = Product::findOrFail($id);
 
-//     auth()->user()->cart()->create([
-//         'product_id' => $product->id,
-//         'price' => $product->final_price, // السعر بعد الخصم
-//         'quantity' => $request->input('quantity', 1),
-//     ]);
-
-//     return back()->with('success', 'تمت إضافة المنتج للسلة.');
-// }
 
 }

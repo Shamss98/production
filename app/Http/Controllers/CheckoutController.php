@@ -9,9 +9,7 @@ use App\Models\Order;
 
 class CheckoutController extends Controller
 {
-    /**
-     * دفع منتج واحد
-     */
+
     public function pay(Request $request, $productId)
     {
         $user = Auth::user();
@@ -167,7 +165,6 @@ class CheckoutController extends Controller
     }
     $paymentKey = $paymentData['token'];
 
-    // 4️⃣ Save order in DB
     Order::create([
         'user_id' => $user->id,
         'status' => 'pending',

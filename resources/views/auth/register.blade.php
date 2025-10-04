@@ -128,6 +128,10 @@
             <input id="password" type="password" name="password" required minlength="8">
         </div>
         <div>
+            <label for="password_confirmation">تاكيد كلمة المرور</label>
+            <input id="password_confirmation" type="password" name="password_confirmation" required minlength="8">
+        </div>
+        <div>
             <button type="submit">انشاء حساب</button>
         </div>
     </form>
